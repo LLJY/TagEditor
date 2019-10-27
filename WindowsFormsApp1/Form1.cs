@@ -28,14 +28,22 @@ namespace WindowsFormsApp1
         {
 
         }
-        private void folder_Click(object sender, EventArgs e)
+        private async void folder_Click(object sender, EventArgs e)
         {
             using(var fbd = new FolderBrowserDialog())
             {
                 DialogResult result = fbd.ShowDialog();
                 //check if result is ok
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath)){
-                    files = Directory.GetFiles(fbd.SelectedPath);
+                    string[] allFiles = Directory.GetFiles(fbd.SelectedPath);
+                    //async to not stall the application.
+                    audioFiles = await listFiles(allFiles);
+                    //check if list is empty, return error if it is empty
+                    if (!audioFiles.Any())
+                    {
+                        //list is empty.
+                        MessageBox.Show("No audio files found!", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
@@ -45,12 +53,21 @@ namespace WindowsFormsApp1
             }
         }
 
-        public async Task<List<string>> listFiles(string dir)
+        public async Task<List<string>> listFiles(string[] files)
         {
-            return null;
+            List<string> filteredFiles = new List<string>();
+            foreach (var item in files)
+            {
+                //check if contains the audio files we support
+                if (item.Contains(".flac") || item.Contains(".mp3:"))
+                {
+                    filteredFiles.Add(item);
+                }
+            }
+            return filteredFiles;
         }
         //if folder or fileis chosen
         private bool multipleChosen;
-        private string[] files;
+        private List<string> audioFiles;
     }
 }
