@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,6 +33,15 @@ namespace WindowsFormsApp1
             using(var fbd = new FolderBrowserDialog())
             {
                 DialogResult result = fbd.ShowDialog();
+                //check if result is ok
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath)){
+                    files = Directory.GetFiles(fbd.SelectedPath);
+                }
+                else
+                {
+                    //if invalid, show dialog
+                    MessageBox.Show("Invalid folder path selected", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
