@@ -138,6 +138,7 @@
             this.file.TabIndex = 10;
             this.file.Text = "Select File..";
             this.file.UseVisualStyleBackColor = true;
+            this.file.Click += new System.EventHandler(this.file_Click);
             // 
             // folder
             // 

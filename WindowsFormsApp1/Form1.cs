@@ -30,6 +30,7 @@ namespace WindowsFormsApp1
         }
         private async void folder_Click(object sender, EventArgs e)
         {
+            multipleChosen = true;
             using(var fbd = new FolderBrowserDialog())
             {
                 DialogResult result = fbd.ShowDialog();
@@ -49,6 +50,27 @@ namespace WindowsFormsApp1
                 {
                     //if invalid, show dialog
                     MessageBox.Show("Invalid folder path selected", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+        private void file_Click(object sender, EventArgs e)
+        {
+            multipleChosen = false;
+            using(var ofd = new OpenFileDialog())
+            {
+                //start in the C: drive
+                ofd.InitialDirectory = @"c:\";
+                ofd.FilterIndex = 2;
+                ofd.Filter = "mp3 files (*.mp3)|*.mp3|flac lossless music (*.flac)|*.flac";
+                ofd.RestoreDirectory = true;
+                DialogResult result = ofd.ShowDialog();
+                if(result == DialogResult.OK && !string.IsNullOrWhiteSpace(ofd.FileName))
+                {
+                    audioFiles[0] = ofd.FileName;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid file selected", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
