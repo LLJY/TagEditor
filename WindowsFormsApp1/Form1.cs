@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TagLib;
 
 namespace WindowsFormsApp1
 {
@@ -66,7 +67,16 @@ namespace WindowsFormsApp1
                 DialogResult result = ofd.ShowDialog();
                 if(result == DialogResult.OK && !string.IsNullOrWhiteSpace(ofd.FileName))
                 {
-                    audioFiles[0] = ofd.FileName;
+                    string item = ofd.FileName;
+                    TagLib.File file = TagLib.File.Create(item);
+                    //let's only support first genre for now...
+                    string artist = file.Tag.FirstArtist;
+                    string album = file.Tag.Album;
+                    string genre = file.Tag.FirstGenre;
+                    MemoryStream ms = new MemoryStream(file.Tag.Pictures[0].Data.Data);
+                    Image albumArt = Image.FromStream(ms);
+                    SongData sd = new SongData(item, albumArt, album, artist, genre);
+                    audioFiles[0] = sd;
                 }
                 else
                 {
@@ -75,21 +85,29 @@ namespace WindowsFormsApp1
             }
         }
 
-        public async Task<List<string>> listFiles(string[] files)
+        public async Task<List<SongData>> listFiles(string[] files)
         {
-            List<string> filteredFiles = new List<string>();
+            List<SongData> filteredFiles = new List<SongData>();
             foreach (var item in files)
             {
                 //check if contains the audio files we support
                 if (item.Contains(".flac") || item.Contains(".mp3:"))
                 {
-                    filteredFiles.Add(item);
+                    TagLib.File file = TagLib.File.Create(item);
+                    //let's only support first genre for now...
+                    string artist = file.Tag.FirstArtist;
+                    string album = file.Tag.Album;
+                    string genre = file.Tag.FirstGenre;
+                    MemoryStream ms = new MemoryStream(file.Tag.Pictures[0].Data.Data);
+                    Image albumArt = Image.FromStream(ms);
+                    SongData sd = new SongData(item, albumArt, album, artist, genre);
+                    filteredFiles.Add(sd);
                 }
             }
             return filteredFiles;
         }
         //if folder or fileis chosen
         private bool multipleChosen;
-        private List<string> audioFiles;
+        private List<SongData> audioFiles;
     }
 }
