@@ -46,6 +46,11 @@ namespace WindowsFormsApp1
                         //list is empty.
                         MessageBox.Show("No audio files found!", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    //set the values of the picture and textboxes to the first element
+                    artist.Text = audioFiles[0].Artist;
+                    albumArt.Image = audioFiles[0].AlbumArt;
+                    album.Text = audioFiles[0].Album;
+                    genre.Text = audioFiles[0].Genre;
                 }
                 else
                 {

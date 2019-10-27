@@ -102,6 +102,7 @@
             this.albumArt.Location = new System.Drawing.Point(12, 32);
             this.albumArt.Name = "albumArt";
             this.albumArt.Size = new System.Drawing.Size(158, 158);
+            this.albumArt.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.albumArt.TabIndex = 6;
             this.albumArt.TabStop = false;
             // 
