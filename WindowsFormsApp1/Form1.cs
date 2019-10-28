@@ -46,11 +46,8 @@ namespace WindowsFormsApp1
                         //list is empty.
                         MessageBox.Show("No audio files found!", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    //set the values of the picture and textboxes to the first element
-                    artist.Text = audioFiles[0].Artist;
-                    albumArt.Image = audioFiles[0].AlbumArt;
-                    album.Text = audioFiles[0].Album;
-                    genre.Text = audioFiles[0].Genre;
+                    //set the values of ui elements to element 0
+                    await updateUI(true, 0);
                 }
                 else
                 {
@@ -78,9 +75,10 @@ namespace WindowsFormsApp1
                     string artist = file.Tag.FirstArtist;
                     string album = file.Tag.Album;
                     string genre = file.Tag.FirstGenre;
+                    string title = file.Tag.Title;
                     MemoryStream ms = new MemoryStream(file.Tag.Pictures[0].Data.Data);
                     Image albumArt = Image.FromStream(ms);
-                    SongData sd = new SongData(item, albumArt, album, artist, genre);
+                    SongData sd = new SongData(item, albumArt, album, artist, genre, title);
                     audioFiles[0] = sd;
                 }
                 else
@@ -103,24 +101,58 @@ namespace WindowsFormsApp1
                     string artist = file.Tag.FirstArtist;
                     string album = file.Tag.Album;
                     string genre = file.Tag.FirstGenre;
+                    string title = file.Tag.Title;
+                    Image albumArt = null;
                     try
                     {
                         MemoryStream ms = new MemoryStream(file.Tag.Pictures[0].Data.Data);
-                        Image albumArt = Image.FromStream(ms);
+                        albumArt = Image.FromStream(ms);
                     }
-                    catch
+                    catch(Exception)
                     {
                         //no albumart found
-                        Image albumArt = null;
+                        throw;
                     }
-                    SongData sd = new SongData(item, albumArt, album, artist, genre);
+                    SongData sd = new SongData(item, albumArt, album, artist, genre, title);
                     filteredFiles.Add(sd);
                 }
             }
             return filteredFiles;
         }
+
+        public async Task updateUI(bool updateCombo, int index)
+        {
+            artist.Text = audioFiles[index].Artist;
+            albumArt.Image = audioFiles[index].AlbumArt;
+            album.Text = audioFiles[index].Album;
+            genre.Text = audioFiles[index].Genre;
+            songTitle.Text = audioFiles[index].Title;
+            if (updateCombo == true)
+            {
+                foreach (var item in audioFiles)
+                {
+                    comboBox1.Items.Add(item.Title);
+                }
+                comboBox1.SelectedItem = audioFiles[index].Title;
+            }
+        }
         //if folder or fileis chosen
         private bool multipleChosen;
         private List<SongData> audioFiles;
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = comboBox1.SelectedIndex;
+            updateUI(false, index);
+        }
+
+        private void Confirm_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ConfirmSingle_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -14,13 +14,15 @@ namespace WindowsFormsApp1
         public string Album { get; set; }
         public string Artist { get; set; }
         public string Genre { get; set; }
-        public SongData(string fileName, Image albumArt, string album, string artist, string genre)
+        public string Title { get; set; }
+        public SongData(string fileName, Image albumArt, string album, string artist, string genre, string title)
         {
             FileName = fileName;
             AlbumArt = albumArt;
             Album = album;
             Artist = artist;
             Genre = genre;
+            Title = title;
         }
     }
 }

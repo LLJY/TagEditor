@@ -44,6 +44,10 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.file = new System.Windows.Forms.Button();
             this.folder = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.songTitle = new System.Windows.Forms.TextBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.confirmSingle = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.albumArt)).BeginInit();
             this.SuspendLayout();
             // 
@@ -121,8 +125,9 @@
             this.confirm.Name = "confirm";
             this.confirm.Size = new System.Drawing.Size(125, 31);
             this.confirm.TabIndex = 8;
-            this.confirm.Text = "Apply";
+            this.confirm.Text = "Apply All";
             this.confirm.UseVisualStyleBackColor = true;
+            this.confirm.Click += new System.EventHandler(this.Confirm_Click);
             // 
             // progressBar1
             // 
@@ -151,11 +156,50 @@
             this.folder.UseVisualStyleBackColor = true;
             this.folder.Click += new System.EventHandler(this.folder_Click);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(179, 110);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(27, 13);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Title";
+            // 
+            // songTitle
+            // 
+            this.songTitle.Location = new System.Drawing.Point(217, 110);
+            this.songTitle.Name = "songTitle";
+            this.songTitle.Size = new System.Drawing.Size(100, 20);
+            this.songTitle.TabIndex = 13;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(15, 196);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(155, 21);
+            this.comboBox1.TabIndex = 14;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
+            // 
+            // confirmSingle
+            // 
+            this.confirmSingle.Location = new System.Drawing.Point(340, 214);
+            this.confirmSingle.Name = "confirmSingle";
+            this.confirmSingle.Size = new System.Drawing.Size(125, 31);
+            this.confirmSingle.TabIndex = 15;
+            this.confirmSingle.Text = "Apply";
+            this.confirmSingle.UseVisualStyleBackColor = true;
+            this.confirmSingle.Click += new System.EventHandler(this.ConfirmSingle_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(477, 294);
+            this.Controls.Add(this.confirmSingle);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.songTitle);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.folder);
             this.Controls.Add(this.file);
             this.Controls.Add(this.progressBar1);
@@ -193,6 +237,10 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button file;
         private System.Windows.Forms.Button folder;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox songTitle;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button confirmSingle;
     }
 }
 
