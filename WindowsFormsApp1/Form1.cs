@@ -103,8 +103,16 @@ namespace WindowsFormsApp1
                     string artist = file.Tag.FirstArtist;
                     string album = file.Tag.Album;
                     string genre = file.Tag.FirstGenre;
-                    MemoryStream ms = new MemoryStream(file.Tag.Pictures[0].Data.Data);
-                    Image albumArt = Image.FromStream(ms);
+                    try
+                    {
+                        MemoryStream ms = new MemoryStream(file.Tag.Pictures[0].Data.Data);
+                        Image albumArt = Image.FromStream(ms);
+                    }
+                    catch
+                    {
+                        //no albumart found
+                        Image albumArt = null;
+                    }
                     SongData sd = new SongData(item, albumArt, album, artist, genre);
                     filteredFiles.Add(sd);
                 }
