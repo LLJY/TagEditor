@@ -14,6 +14,9 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
+        //if folder or fileis chosen
+        private bool multipleChosen;
+        private List<SongData> audioFiles;
         public Form1()
         {
            
@@ -87,7 +90,21 @@ namespace WindowsFormsApp1
                 }
             }
         }
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = comboBox1.SelectedIndex;
+            updateUI(false, index);
+        }
 
+        private async void Confirm_Click(object sender, EventArgs e)
+        {
+            await applyAll();
+            MessageBox.Show("Successfully applied!", "DONE", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        private void ConfirmSingle_Click(object sender, EventArgs e)
+        {
+
+        }
         public async Task<List<SongData>> listFiles(string[] files)
         {
             List<SongData> filteredFiles = new List<SongData>();
@@ -136,23 +153,42 @@ namespace WindowsFormsApp1
                 comboBox1.SelectedItem = audioFiles[index].Title;
             }
         }
-        //if folder or fileis chosen
-        private bool multipleChosen;
-        private List<SongData> audioFiles;
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private async Task applyAll()
         {
-            int index = comboBox1.SelectedIndex;
-            updateUI(false, index);
+            progressBar1.Step = 1;
+            //method to apply changes to all songs
+            //since we are not stupid, we will only apply Artist, Genre and Album Art
+            progressBar1.Maximum = audioFiles.Count;
+            foreach (var item in audioFiles)
+            {
+                TagLib.File f = TagLib.File.Create(item.FileName);
+                f.Tag.Album = album.Text;
+                for (int i = 0; i < f.Tag.Artists.Length; i++)
+                {
+                    f.Tag.Artists[i] = artist.Text;
+                }
+                for (int i = 0; i < f.Tag.Genres.Length; i++)
+                {
+                    //set every genre to the genre.
+                    f.Tag.Genres[i] = genre.Text;
+                }
+                MemoryStream ms = new MemoryStream();
+                albumArt.Image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                byte[] myBytes = ms.ToArray();
+                ByteVector byteVector = new ByteVector(myBytes, myBytes.Length);
+                TagLib.Picture picture = new Picture(byteVector);
+                TagLib.Id3v2.AttachedPictureFrame albumCoverPictFrame = new TagLib.Id3v2.AttachedPictureFrame(picture);
+                albumCoverPictFrame.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg;
+                albumCoverPictFrame.Type = TagLib.PictureType.FrontCover;
+                IPicture converted = (IPicture)albumCoverPictFrame;
+                for (int i = 0; i < f.Tag.Pictures.Length; i++)
+                {
+                    f.Tag.Pictures[i] = converted;
+                }
+                f.Save();
+                progressBar1.PerformStep();
+            }
         }
 
-        private void Confirm_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ConfirmSingle_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
